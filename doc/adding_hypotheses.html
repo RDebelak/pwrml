@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Adding Hypotheses</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Adding Hypotheses</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pwrml)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mirt)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># To install the most recent mirt version (results may otherwise be flawed):</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># library(devtools)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># install_github(&#39;philchalmers/mirt&#39;)</span></span></code></pre></div>
+<div id="walkthrough" class="section level1">
+<h1>Walkthrough</h1>
+<p>This vignette introduces the addition of new hypothesis to allow for a power analysis for the Wald, LR, score and gradient test. It is intended for advanced R users. The necessary steps are:</p>
+<ul>
+<li>Function to set up the restricted model</li>
+<li>Function to set up the unrestricted model</li>
+<li>Function to maximize the likelihood of the restricted parameters</li>
+<li>Putting it together</li>
+</ul>
+<p>As an example, we will set up a simple hypothesis, testing whether the difficulty of the first item is equal to 0.</p>
+<div id="function-to-set-up-the-restricted-model" class="section level2">
+<h2>Function to set up the restricted model</h2>
+<p>In our restricted model, we define the A Matrix and the c vector. They formally represent the hypothesis. Then we setup the instructions for mirt to fit the model, which imply to keep the first item difficulty fixed at 0.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  res <span class="ot">=</span> <span class="cf">function</span>(altpars,<span class="at">nullpars =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    n.items <span class="ot">=</span> <span class="fu">length</span>(altpars[[<span class="dv">1</span>]])</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    re <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">n.items =</span> n.items,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">itemtype =</span> <span class="st">&quot;2PL&quot;</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">Amat =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="fu">rep</span>(<span class="dv">0</span>,(n.items<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">2</span>)) <span class="sc">%&gt;%</span> <span class="fu">matrix</span>(.,<span class="at">ncol=</span>n.items<span class="sc">*</span><span class="dv">2</span>,<span class="at">byrow=</span><span class="cn">TRUE</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">cvec =</span> <span class="dv">0</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">model =</span> mirt<span class="sc">::</span><span class="fu">mirt.model</span>(<span class="fu">paste</span>(<span class="st">&#39;F = 1-&#39;</span>,n.items,<span class="st">&#39;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="st">                           FIXED = (1, d)</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="st">                           START = (1,d,0)&#39;</span>))</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(re)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+</div>
+<div id="function-to-set-up-the-unrestricted-model" class="section level2">
+<h2>Function to set up the unrestricted model</h2>
+<p>The unrestricted model is a basic 2PL model. Note that we generate a longpars object that represents beta in the multiplication “A * beta = c”. It results from a concatenation of the discrimination and difficulty parameters.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>unres <span class="ot">=</span> <span class="cf">function</span>(altpars) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    re <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">parsets =</span> altpars,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">model =</span> <span class="dv">1</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">itemtype =</span> <span class="st">&quot;2PL&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">longpars =</span> <span class="fu">pars.long</span>(<span class="at">pars =</span> altpars,<span class="at">itemtype=</span><span class="st">&quot;2PL&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(re)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+</div>
+<div id="function-to-maximize-the-likelihood-of-the-restricted-parameters" class="section level2">
+<h2>Function to maximize the likelihood of the restricted parameters</h2>
+<p>We define a function that calculates the maximum likelihood parameters under the restricted model. In this specific case, we know that the restricted model parameters can be expected to result in the true parameters for all but the first item. The only parameter in question is the discrimination of the first item parameter. We therefore ask the question: If we set the first item difficulty to 0, what is the most likely item discrimination given the data follows the true parameters.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>  maximizeL <span class="ot">=</span> <span class="cf">function</span>(hyp) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Hypothesis-specific algorithm to find the maximum likelihood restricted parameter set</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    maxlpreload<span class="ot">=</span> <span class="cf">function</span>(pars) {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>      <span class="co"># returns the density for each response pattern under the model parameters pars</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      patterns <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pars<span class="sc">$</span>a),<span class="cf">function</span>(x) <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      pre <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(patterns)) {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        pre[i] <span class="ot">=</span> <span class="fu">g</span>(patterns[i,],pars)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="fu">return</span>(pre)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    maxl <span class="ot">=</span> <span class="cf">function</span>(x,pars,pre) {</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>      <span class="co"># calculates the likelihood of parameters x given model &quot;pars&quot;</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>      patterns <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(<span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(pars<span class="sc">$</span>a),<span class="cf">function</span>(x) <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))))</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>      x <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">a=</span><span class="fu">c</span>(x,pars<span class="sc">$</span>a[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(pars<span class="sc">$</span>a)]),</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">d=</span><span class="fu">c</span>(<span class="dv">0</span>,pars<span class="sc">$</span>d[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(pars<span class="sc">$</span>d)])</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>      res  <span class="ot">=</span> <span class="fu">c</span>()</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>      <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(patterns)) {</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>        px <span class="ot">=</span> pre[i]</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>        qx <span class="ot">=</span> <span class="fu">g</span>(patterns[i,],x)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>        res[i] <span class="ot">=</span>  {px<span class="sc">*</span><span class="fu">log</span>(qx)}</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>      re <span class="ot">=</span> <span class="sc">-</span><span class="fu">sum</span>(res)</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    resmod <span class="ot">=</span> hyp<span class="sc">$</span>resmod</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    unresmod <span class="ot">=</span> hyp<span class="sc">$</span>unresmod</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    pars <span class="ot">=</span> unresmod<span class="sc">$</span>parsets</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="fu">load.functions</span>(unresmod<span class="sc">$</span>itemtype)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    startval <span class="ot">=</span> pars<span class="sc">$</span>a[<span class="dv">1</span>]</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    maxlpre <span class="ot">=</span> <span class="fu">maxlpreload</span>(pars)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>    optpar <span class="ot">=</span> <span class="fu">optim</span>(startval,<span class="cf">function</span>(x) {<span class="fu">maxl</span>(x,pars,maxlpre)},<span class="at">method =</span> <span class="st">&quot;BFGS&quot;</span>)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>    re <span class="ot">=</span> pars</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    re<span class="sc">$</span>a <span class="ot">=</span> <span class="fu">c</span>(optpar<span class="sc">$</span>par[<span class="dv">1</span>],pars<span class="sc">$</span>a[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(pars<span class="sc">$</span>a)])</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>    re<span class="sc">$</span>d <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>,pars<span class="sc">$</span>d[<span class="dv">2</span><span class="sc">:</span><span class="fu">length</span>(pars<span class="sc">$</span>d)])</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(re)</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  }</span></code></pre></div>
+</div>
+<div id="putting-it-together" class="section level2">
+<h2>Putting it together</h2>
+<p>We simply put the functions defined above in a list.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>h_basic <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">res =</span> res,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">unres =</span> unres,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">maximizeL =</span> maximizeL</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+</div>
+</div>
+<div id="testing-the-new-hypothesis" class="section level1">
+<h1>Testing the new hypothesis</h1>
+<p>The new hypothesis can be set up using the h_basic list object as the type argument of the setup_hypothesis function. We may then calculate the power at arbitrary sample sizes.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>altpars <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">a =</span> <span class="fu">rlnorm</span>(<span class="dv">5</span>,<span class="at">sdlog =</span> .<span class="dv">4</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">d =</span> <span class="fu">rnorm</span>(<span class="dv">5</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>altpars<span class="sc">$</span>d[<span class="dv">1</span>]<span class="ot">=</span>.<span class="dv">2</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>hyp <span class="ot">&lt;-</span> <span class="fu">setup_hypothesis</span>(<span class="at">type =</span> h_basic, <span class="at">altpars =</span> altpars)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>ncps <span class="ot">&lt;-</span> <span class="fu">calculate_ncps</span>(<span class="at">hyp=</span>hyp)</span></code></pre></div>
+<pre><code>## Registered S3 method overwritten by &#39;spatstat&#39;:
+##   method     from
+##   print.boxx cli</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">100</span>,<span class="dv">2000</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pow <span class="ot">=</span> <span class="fu">power</span>(<span class="at">hyp=</span>hyp,<span class="at">ncp=</span>ncps[<span class="st">&quot;Gradient&quot;</span>],<span class="at">alpha=</span>.<span class="dv">05</span>,<span class="at">ssize=</span>n)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(n,pow)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
