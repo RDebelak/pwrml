@@ -31,7 +31,11 @@ setup.data = function(hyp, n,dist.fun=rnorm) {
 
     pars = hyp$unresmod$parsets
     if (is.null(pars$g)) {pars$g = 0}
-    df = mirt::simdata(a = pars$a,d = pars$d,guess=pars$g,Theta = distfun(n),itemtype = hyp$unresmod$itemtype)
+    df = mirt::simdata(a = pars$a,
+                       d = pars$d,
+                       guess=pars$g,
+                       Theta = distfun(n),
+                       itemtype = hyp$unresmod$itemtype)
     re=list(data = df)
   }
 

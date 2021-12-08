@@ -11,11 +11,11 @@
 #' @examples
 calctime = function(hyp,n.items) {
 
-  n.items.ex = length(hyp$unresmod$parsets$d)
+  n.items.ex <- length(hyp$unresmod$parsets$d)
 
   ptm <- proc.time() #start timer
   ncps <- calculate_ncps(hyp=hyp)
-  time = proc.time() - ptm #stop timer
+  time <- proc.time() - ptm #stop timer
 
   time = as.numeric(time[3])
 
@@ -52,26 +52,32 @@ findlambda = function(lx,A,v=2) {
 #'
 #' dat <- expand.table(LSAT7)
 #' mirtfit <- mirt(dat,1)
-#' pars = coef_short(mirtfit)
+#' pars <- coef_short(mirtfit)
 #'
 coef_short = function(mirtfit,itemtype=NULL) {
   # extracts coefs from mml coef output
 
   if (is.null(itemtype)) {
-    itemtype=mirtfit@Model$itemtype[1]
+    itemtype <- extract.mirt(mirtfit, what = "itemtype")[1]
   }
 
-  coefs = mirt::coef(mirtfit,simplify=TRUE)
+  coefs <- mirt::coef(mirtfit,simplify=TRUE)
 
-  if (mirtfit@Data$ngroups==1) {
+  if (extract.mirt(mirtfit, "ngroups") == 1) {
 
     a = as.data.frame(coefs$items)
 
     if (itemtype=="gpcm") { # Other Form for GPCM
-      re =  list(a = a$a1, d=cbind(rep(0,length(a$a1)),a$d1,a$d2),g = rep(0,length(a$a1)),itemtype=itemtype)
+      re =  list(a = a$a1,
+                 d=cbind(rep(0,length(a$a1)),a$d1,a$d2),
+                 g = rep(0,length(a$a1)),
+                 itemtype=itemtype)
 
     } else { # default form
-      re =  list(a = a$a1, d  = a$d,g = a$g,itemtype=itemtype)
+      re =  list(a = a$a1,
+                 d = a$d,
+                 g = a$g,
+                 itemtype = itemtype)
     }
 
 
@@ -83,10 +89,16 @@ coef_short = function(mirtfit,itemtype=NULL) {
       a = as.data.frame(coefs[[i]]$items)
 
       if (itemtype=="gpcm") { # Other Form for GPCM
-        re[[i]] =  list(a = a$a1, d=cbind(rep(0,length(a$a1)),a$d1,a$d2),g = rep(0,length(a$a1)),itemtype=itemtype)
+        re[[i]] =  list(a = a$a1,
+                        d = cbind(rep(0,length(a$a1)),a$d1,a$d2),
+                        g = rep(0,length(a$a1)),
+                        itemtype = itemtype)
 
       } else { # default form
-        re[[i]] =  list(a = a$a1, d  = a$d,g = a$g,itemtype=itemtype)
+        re[[i]] =  list(a = a$a1,
+                        d  = a$d,
+                        g = a$g,
+                        itemtype=itemtype)
       }
 
     }
@@ -106,7 +118,7 @@ coef_short = function(mirtfit,itemtype=NULL) {
 #' @export
 #'
 #' @examples
-pars.long = function(pars,itemtype,from.mirt=FALSE) {
+pars.long = function(pars, itemtype, from.mirt=FALSE) {
 
   if(!from.mirt) {
     if (itemtype=="2PL") {
@@ -119,7 +131,10 @@ pars.long = function(pars,itemtype,from.mirt=FALSE) {
   }
 
   if(from.mirt) {
-    if (itemtype=="2PL"& pars@Call[[1]]=="mirt::multipleGroup") {
+    # if (itemtype=="2PL"& pars@Call[[1]]=="mirt::multipleGroup") {
+    # I think that @Call is not unique, but code dependent.
+    # Suggestion:
+    if (itemtype=="2PL"& class(pars)=="MultipleGroupClass") {
       pars = lapply(mirt::coef(pars,simplify=TRUE),function(x) x$items[,1:2] %>% t() %>% as.numeric())
       re = c(pars$A,pars$B[1:2])
     } else if (itemtype=="2PL") {
@@ -127,7 +142,9 @@ pars.long = function(pars,itemtype,from.mirt=FALSE) {
     } else if (itemtype=="3PL") {
       re = mirt::coef(pars,simplify=TRUE)$items[,1:3] %>% t() %>% as.numeric()
     } else if (itemtype=="gpcm") {
-      nkatx = max(pars@Data$data)
+      # nkatx = max(pars@Data$data) # This can lead to an error if the 0 category is never used.
+      # The following code extract the maximum number of response categories minus 1
+      nkatx = max(extract.mirt(pars, "K") - 1)
       a1 = mirt::coef(pars,simplify=TRUE)$items
       re =  a1[,c(1,(ncol(a1)-nkatx+1):ncol(a1))] %>% t() %>% as.numeric()
     }

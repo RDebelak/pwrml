@@ -143,7 +143,7 @@ h_DIF2PL = list(
       qx = function(th) {f(th,x[1],x[2],1)}
       kl = function(th) {px1(th)*log(qx(th))+(1-px1(th))*log(1-qx(th)) + px2(th)*log(qx(th))+(1-px2(th))*log((1-qx(th)))
       }
-      re = -spatstat::gauss.hermite(kl,order=20)
+      re = -spatstat.core::gauss.hermite(kl,order=20)
     }
 
     resmod = hyp$resmod

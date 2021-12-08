@@ -25,7 +25,7 @@ load.functions = function (model) {
       return(re)
     }
     g = function(pattern, pars) {
-      re = spatstat::gauss.hermite(function(th) {
+      re = spatstat.core::gauss.hermite(function(th) {
         prod(fvec(pattern, th, pars))
       }, order = 30)
       return(re)
@@ -43,7 +43,7 @@ load.functions = function (model) {
       return(re)
     }
     gdot = function(pattern, pars) {
-      re = spatstat::gauss.hermite(function(th) {
+      re = spatstat.core::gauss.hermite(function(th) {
         fdot(pattern, th, pars)
       }, order = 30)
       return(re)

@@ -117,7 +117,7 @@ score_obs = function(fitted,export.lx=FALSE) {
   unresmod = fitted$hyp$unresmod
   parsr = coef_short(fitted$res,itemtype = resmod$itemtype)
   load.functions(resmod$itemtype)
-  patterns = fitted$res@Data$data
+  patterns = extract.mirt(fitted$res, "data")
   hashs = apply(patterns,1,digest::digest) %>% factor(.,levels=unique(.))
   rownames(patterns)=hashs
   up = unique(patterns)
@@ -161,7 +161,7 @@ grad_obs = function(fitted,lx=NULL) {
   unresmod = fitted$hyp$unresmod
   parsr = coef_short(fitted$res,itemtype = resmod$itemtype)
   load.functions(resmod$itemtype)
-  patterns = fitted$res@Data$data
+  patterns = extract.mirt(fitted$res, "data")
   hashs = apply(patterns,1,digest::digest) %>% factor(.,levels=unique(.))
   rownames(patterns)=hashs
   up = unique(patterns)
